@@ -1,5 +1,7 @@
 # C-Language-Parser  
  a programming challenge for a PhD offer in University at Buffalo  
+ 
+The challenge is to write a program in any language that can parse a valid C declaration and print out its type in natural language according to the C99 standard draft. The program should read a file specified as a command-line argument, containing a valid C declaration and print a single line describing the type of the entity declared. The types in C are divided into three categories: object types, function types, and incomplete types. The simplified version of the type system for this challenge includes only integer and floating-point object types, arrays, and pointers. The program should be able to parse common use cases, such as integer and pointer declarations, arrays, and functions, with or without arguments. The C99 standard draft is referenced to provide further details on the type system in C.
 
 ## Require  
 
