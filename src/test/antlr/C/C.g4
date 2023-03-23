@@ -29,7 +29,7 @@
 /** C 2011 grammar built from the C11 Spec */
 grammar C;
 
-@header {package cn.olifant.atry;}
+@header {package cn.olifant.C;}
 
 primaryExpression
     :   Identifier
