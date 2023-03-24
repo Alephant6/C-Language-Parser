@@ -7,21 +7,33 @@ import java.nio.charset.Charset;
 
 public class CDeclarationParserTest {
     public static void main(String[] args) throws Exception {
-        // 读取C语言源代码文件
-        CharStream input = CharStreams.fromFileName("src/test/java/cn/olifant/C/Test.c", Charset.forName("UTF-8"));
+//        // 读取C语言源代码文件
+//        CharStream input = CharStreams.fromFileName("src/test/java/cn/olifant/C/Test.c", Charset.forName("UTF-8"));
+        // 获得输入
+        String input = "int x[3];";
+        // 解析input，获得parser
+        CParser declarationParser = getParser(input);
+        // 解析C语言代码，生成抽象语法树
+        ParseTree declarationTree = declarationParser.declaration();
+//        ParseTree declarationTree = declarationParser.declarator();
+
+        // 打印抽象语法树
+        System.out.println(declarationTree.toStringTree(declarationParser));
+        // 提取声明类型信息并输出
+        String type = extractDeclarationType(declarationTree);
+        System.out.println(type);
+    }
+
+    // 从CharSteam中获得 CParser
+    private static CParser getParser(String input) {
+        // 转换格式
+        CharStream charStream = CharStreams.fromString(input);
         // 创建C语言词法分析器
-        CLexer lexer = new CLexer(input);
+        CLexer lexer = new CLexer(charStream);
         // 创建词法符号流
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         // 创建C语言语法分析器
-        CParser parser = new CParser(tokens);
-        // 解析C语言代码，生成抽象语法树
-        ParseTree tree = parser.declaration();
-        // 打印抽象语法树
-        System.out.println(tree.toStringTree(parser));
-        // 提取声明类型信息并输出
-        String type = extractDeclarationType(tree);
-        System.out.println(type);
+        return new CParser(tokens);
     }
 
     // 从抽象语法树中提取声明类型信息
@@ -36,7 +48,8 @@ public class CDeclarationParserTest {
             baseType = tree.getChild(0).getText();
             // 第二个节点的后缀
             String suffix = tree.getChild(1).getText();
-            ParseTree child1 = tree.getChild(1);
+            CParser declaratorParser = getParser(suffix);
+            ParseTree declaratorTree = declaratorParser.declarator();
             // 如果存在*，则说明是指针
             if (suffix.startsWith("*")){
                 // 指针声明
