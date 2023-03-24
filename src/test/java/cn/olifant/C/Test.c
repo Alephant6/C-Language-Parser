@@ -1,1 +1,1 @@
-int *x[2];
+int (*f)(int a, float b);
