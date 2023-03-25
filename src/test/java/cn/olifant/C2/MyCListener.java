@@ -9,14 +9,12 @@ public class MyCListener extends CBaseListener{
     // 并且在externalDeclaration下会优先执行declaration，更无法识别出functionDefinition
     // 同理functionSpecifier也被其他的规则顶替
     private int numFunctionDeclaration =0;
-    // 小括号-()层数，默认没有
-    private int numParen =0;
     // 中括号-[]层数，默认没有
     private int numBracket =0;
     // 普通指针个数，默认没有
     private int numPointer =0;
-    // 判断函数参数的指针层数，默认没有
-    private int numParameterPointer =0;
+    // 抽象指针个数，默认没有
+    private int numAbstractPointer =0;
     // 函数参数个数，默认没有
     private int numParameters =0;
     // 函数参数索引数
@@ -50,33 +48,22 @@ public class MyCListener extends CBaseListener{
     // 进入directDeclarator
     @Override
     public void enterDirectDeclarator(CParser.DirectDeclaratorContext ctx) {
-        // 如果directDeclarator中以)结尾，说明含有()
-        if (ctx.parameterTypeList()==null) {
-            if (ctx.getText().endsWith(")")) {
-                // 判定存在()，打印(，且其层数加1
-                numParen++;
-                System.out.print("(");
-                // 如果directDeclarator中以]结尾，说明含有[]
-            } else if (ctx.getText().endsWith("]")) {
+            // 如果directDeclarator中以]结尾，说明含有[]
+            if (ctx.getText().endsWith("]")) {
                 // 判定存在[]，且其层数加1，这是一个数组
                 numBracket++;
             }
-        }
+//        }
     }
 
     // 退出directDeclarator
     @Override
     public void exitDirectDeclarator(CParser.DirectDeclaratorContext ctx) {
-        // 如果是数组，且不是变量名或函数名；因为它们是父规则directDeclarator的directDeclarator
-        if (numParen !=0 && ctx.getChildCount() > 2){
-            // 打印)
-            System.out.print(")");
-            // 退出这个directDeclarator时，层数减1
-            numParen--;
-            // 如果是数组，且不是变量名或函数名
-        } else if (numBracket !=0 && ctx.getChildCount() > 2) {
+        if (numBracket !=0 && ctx.getChildCount() > 2) {
             String size = ctx.getChild(ctx.getChildCount()-2).getText();
             System.out.print("size-" + size + " array of " );
+            // []，且其层数减1
+            numBracket--;
         }
     }
 
@@ -96,6 +83,23 @@ public class MyCListener extends CBaseListener{
             numPointer--;
         }
 
+    }
+
+    // 进入abstractDeclarator
+    @Override
+    public void enterAbstractDeclarator(CParser.AbstractDeclaratorContext ctx) {
+        // 如果不为空，获取abstractDeclartor中抽象指针个数
+        if (ctx.pointer()!=null) numAbstractPointer = ctx.pointer().getChildCount();
+    }
+
+    // 退出abstractDeclarator
+    @Override
+    public void exitAbstractDeclarator(CParser.AbstractDeclaratorContext ctx) {
+        // 有多少个抽象指针就打印多少次
+        while (numAbstractPointer != 0) {
+            System.out.print("pointer to ");
+            numAbstractPointer--;
+        }
     }
 
     // 进入parameterList
