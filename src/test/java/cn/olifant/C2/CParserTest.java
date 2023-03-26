@@ -11,10 +11,12 @@ public class CParserTest {
 //        String input = "int x;";
 //        String input = "int x[2];";
 //        String input = "int *x[2];";
+//        String input = "int (*x)[2];";
+        String input = "int *(x[2]);";
 //        String input = "int **x[2];";
 //        String input = "int f(int x, float *y);";
 //        String input = "int (*f)(int x, float *);";
-        String input = "int (*f[2])(int x, float *);";
+//        String input = "int (*f[2])(int x, float *);";
         CharStream stream = CharStreams.fromString(input);
         CLexer lexer = new CLexer(stream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
