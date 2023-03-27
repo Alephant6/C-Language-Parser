@@ -8,20 +8,20 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) throws Exception{
-        // 输入.c源文件的文件名，以UTF-8编码标准
+        // Enter the file name of the .c source file, encoded in UTF-8
         String fileName = "src/main/java/cn/olifant/CDeclaration/samples.c";
-        // 读入文件
+        // Read file
         ArrayList<String> fileContext = readCFile(fileName);
 
-        // 遍历文件内容，输出声明的类
+        // Traverse the contents of the file and output the declared class
         for(int i=0; i<fileContext.size(); i++) {
-            // 获取一个声明
+            // Get a declaration
             String input = fileContext.get(i);
-            // 定义对输出格式
+            // Define the output format
             System.out.print("Input "+(i+1)+": "+input+"\nOutput "+(i+1)+": ");
-            // 对input分析后输出结果
+            // Output the result after analyzing the input
             printType(input);
-            // 换行
+            // New lines
             System.out.println("\n");
 
         }
@@ -29,42 +29,42 @@ public class Main {
     }
 
 
-    // 将输入的声明类型以自然语言的形式打印出来
+    // Print out the input declaration type in natural language
     public static void printType(String input) {
-        // 参考3.4
-        // 新建一个CharStream，从input中获取
+        // Refer to 3.4
+        // Create a new CharStream and get it from input
         CharStream stream = CharStreams.fromString(input);
-        // 新建一个词法分析器，处理输入的CharStream
+        // Create a new lexical analyzer to process the input CharStream
         CLexer lexer = new CLexer(stream);
-        // 新建一个词法符号的缓冲区，用于存储词法分析器，将生成此法符号
+        // Create a buffer of lexical symbols to store the lexical analyzer, which will generate this lexical symbol
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        // 新建一个语法分析器，处理词法符号缓冲区中的内容
+        // Create a new syntax analyzer to process the contents of the lexical symbol buffer
         CParser parser = new CParser(tokens);
-        // 针对declaration规则，开始语法分析
+        // For declaration rules, start syntax analysis
         ParseTree tree = parser.declaration();
-        // 设置一个监听器
+        // Set up a listener
         CDeclarationListener listener = new CDeclarationListener();
-        // 新建一个walker用于触发上面的监听器
+        // Create a new walker to trigger the above listener
         ParseTreeWalker walker = new ParseTreeWalker();
-        // 使用walker遍历语法树
+        // Use walker to traverse the syntax tree
         walker.walk(listener, tree);
 
     }
 
 
-    // 读取C语言源文件 .c 并返回一个按行存贮字符串的数组
+    // Read the C language source file .c and return an array of strings stored line by line
     public static ArrayList<String> readCFile(String fileName) {
-        // 初始化字符串列表
+        // list of strings
         ArrayList<String> lines = new ArrayList<String>();
 
         try{
-            // 按UTF-8编码格数读取文件
+            // Read files according to the number of UTF-8 encoded grids
             FileInputStream fileInputStream = new FileInputStream(fileName);
             InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, "UTF-8");
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String line = bufferedReader.readLine();
 
-            // 将每一行字符串添加到列表中
+            // Append each line of strings to the list
             while (line != null) {
                 lines.add(line);
                 line = bufferedReader.readLine();
