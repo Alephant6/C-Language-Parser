@@ -18,13 +18,11 @@ public class CDeclarationListener extends CBaseListener{
 
     @Override
     public void enterDeclaration(CParser.DeclarationContext ctx) {
-        //If there are only two child nodes of declaration, it means that it is the most basic variable declaration. At this time, its first child node will not separate the type and variable name, so further child nodes need to be obtained
-        if (ctx.getChildCount()==2){
-            baseType = ctx.getChild(0).getChild(0).getText();
-        }else {
-            // Otherwise the first child node of the declaration is the underlying type
-            baseType = ctx.getChild(0).getText();
+        // Get the basic type in the declaration
+        if (ctx.declarationSpecifiers()!=null) {
+            baseType = ctx.declarationSpecifiers().getText();
         }
+
     }
 
 
