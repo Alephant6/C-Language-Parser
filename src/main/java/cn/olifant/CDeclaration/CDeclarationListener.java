@@ -14,7 +14,6 @@ public class CDeclarationListener extends CBaseListener{
     private int parameterIndex =0;
 
 
-
     @Override
     public void exitDeclaration(CParser.DeclarationContext ctx) {
         // Get the basic type in the declaration
@@ -39,8 +38,6 @@ public class CDeclarationListener extends CBaseListener{
     }
 
 
-
-
     // 离开declarator
     @Override
     public void exitDeclarator(CParser.DeclaratorContext ctx) {
@@ -56,14 +53,9 @@ public class CDeclarationListener extends CBaseListener{
 
 
     @Override
-    public void enterAbstractDeclarator(CParser.AbstractDeclaratorContext ctx) {
+    public void exitAbstractDeclarator(CParser.AbstractDeclaratorContext ctx) {
         // If not empty, get the number of abstract pointers in abstractDeclartor
         if (ctx.pointer()!=null) numAbstractPointer = ctx.pointer().getChildCount();
-    }
-
-
-    @Override
-    public void exitAbstractDeclarator(CParser.AbstractDeclaratorContext ctx) {
         // Print as many times as there are abstract pointers
         while (numAbstractPointer != 0) {
             System.out.print("pointer to ");
