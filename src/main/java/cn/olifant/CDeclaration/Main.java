@@ -8,8 +8,21 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) throws Exception{
+        // Option 1
         // Enter the file name of the .c source file, encoded in UTF-8
-        String fileName = "src/main/java/cn/olifant/CDeclaration/samples.c";
+//        String fileName = "src/main/java/cn/olifant/CDeclaration/samples.c";
+//        printCFileAllType(fileName);
+
+        // Option 2
+        // You can also directly pass in a "valid C-language declaration" string, and output its type
+        String CDecl = "int (*pArray)[3];";
+        // Call pringType method output its type
+        printType(CDecl);
+
+    }
+
+    // print all declared types in a C file
+    public static void printCFileAllType(String fileName) {
         // Read file
         ArrayList<String> fileContext = readCFile(fileName);
 
