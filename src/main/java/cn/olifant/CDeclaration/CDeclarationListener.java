@@ -6,8 +6,8 @@ public class CDeclarationListener extends CBaseListener{
     private String baseType;
     // Define the basic type of parameter
     private String parameterBaseType;
-    // Determine whether it is a multi-level function declaration, the default is not a function.
-    private int numFunctionDeclaration =0;
+    // Determine whether it is a function declaration, the default is not a function.
+    private boolean isFunctionDeclaration =false;
     // The number of common pointers, none by default
     private int numPointer =0;
     // The number of abstract pointers, none by default
@@ -32,7 +32,7 @@ public class CDeclarationListener extends CBaseListener{
     public void exitDeclaration(CParser.DeclarationContext ctx) {
         // print baseType
         // If there is no function, it will be printed at the end
-        if (numFunctionDeclaration ==0){
+        if (!isFunctionDeclaration){
             System.out.print(baseType);
         }
 
@@ -87,7 +87,7 @@ public class CDeclarationListener extends CBaseListener{
     @Override
     public void enterParameterList(CParser.ParameterListContext ctx) {
         // Increase the number of function declarations by 1
-        numFunctionDeclaration++;
+        isFunctionDeclaration = true;
         // Get the number of function parameters
         numParameters = ctx.parameterDeclaration().size();
         // If the function has only one parameter
