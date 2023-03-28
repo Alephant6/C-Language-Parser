@@ -106,7 +106,7 @@ public class CDeclarationListener extends CBaseListener{
     public void enterParameterDeclaration(CParser.ParameterDeclarationContext ctx) {
         // If it is the last one, and there is more than one parameter
         if(parameterIndex==numParameters-1 && numParameters !=1){
-            System.out.print("and ");
+            System.out.print(" and ");
         }
     }
 
@@ -116,7 +116,7 @@ public class CDeclarationListener extends CBaseListener{
         String typeName = ctx.getChild(0).getText();
         // If it is the first one, it will be printed directly
         if (parameterIndex==0){
-            System.out.print(typeName+" ");
+            System.out.print(typeName);
             // If it is the last one, and there is more than one parameter
         }else if (parameterIndex==numParameters-1 && numParameters !=1) {
             System.out.print(typeName+") ");
@@ -131,7 +131,7 @@ public class CDeclarationListener extends CBaseListener{
 
     @Override
     public void exitParameterList(CParser.ParameterListContext ctx) {
-        System.out.print("returning "+ baseType );
+        System.out.print(" returning "+ baseType );
 
     }
 
