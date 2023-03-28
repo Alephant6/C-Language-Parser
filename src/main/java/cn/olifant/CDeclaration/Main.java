@@ -11,11 +11,12 @@ public class Main {
         // Option 1
         // Enter the file name of the .c source file, encoded in UTF-8
 //        String fileName = "src/main/java/cn/olifant/CDeclaration/samples.c";
+//        String fileName = "src/main/java/cn/olifant/CDeclaration/moreComplexSamples.c";
 //        printCFileAllType(fileName);
 
         // Option 2
         // You can also directly pass in a "valid C-language declaration" string, and output its type
-        String CDecl = "int (*pArray)[3];";
+        String CDecl = "int *(*f)[3](int y);";
         // Call pringType method output its type
         printType(CDecl);
 
