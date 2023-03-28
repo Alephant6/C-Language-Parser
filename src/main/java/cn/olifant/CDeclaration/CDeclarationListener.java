@@ -6,8 +6,6 @@ public class CDeclarationListener extends CBaseListener{
     private String baseType;
     // Determine whether it is a multi-level function declaration, the default is not a function.
     private int numFunctionDeclaration =0;
-    // Brackets-[] layer number, no by default
-    private int numBracket =0;
     // The number of common pointers, none by default
     private int numPointer =0;
     // The number of abstract pointers, none by default
@@ -41,24 +39,13 @@ public class CDeclarationListener extends CBaseListener{
     }
 
 
-    @Override
-    public void enterDirectDeclarator(CParser.DirectDeclaratorContext ctx) {
-        // If the directDeclarator ends with ], it means it contains []
-        if (ctx.getText().endsWith("]")) {
-            // It is determined that [] exists, and its layer number is increased by 1, which is an array
-            numBracket++;
-        }
-//        }
-    }
-
 
     @Override
     public void exitDirectDeclarator(CParser.DirectDeclaratorContext ctx) {
-        if (numBracket !=0 && ctx.getChildCount() > 2) {
-            String size = ctx.getChild(ctx.getChildCount()-2).getText();
+        // Determine whether it is an array, and the size is not empty
+        if (ctx.LeftBracket()!=null && ctx.assignmentExpression()!=null){
+            String size = ctx.assignmentExpression().getText();
             System.out.print("size-" + size + " array of " );
-            // [], and its layer number minus 1
-            numBracket--;
         }
     }
 
