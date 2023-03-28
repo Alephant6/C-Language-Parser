@@ -33,10 +33,7 @@ public class CDeclarationListener extends CBaseListener{
     @Override
     public void exitDeclaration(CParser.DeclarationContext ctx) {
         // print baseType
-        // If there is no function, it will be printed at the end
-        if (!isFunctionDeclaration){
-            System.out.print(baseType);
-        }
+        System.out.print(baseType);
 
     }
 
@@ -131,7 +128,7 @@ public class CDeclarationListener extends CBaseListener{
 
     @Override
     public void exitParameterList(CParser.ParameterListContext ctx) {
-        System.out.print(" returning "+ baseType );
+        System.out.print(" returning " );
 
     }
 
