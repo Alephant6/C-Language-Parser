@@ -21,7 +21,9 @@ public class CDeclarationListener extends CBaseListener{
     @Override
     public void enterDeclaration(CParser.DeclarationContext ctx) {
         // Get the basic type in the declaration
-        if (ctx.declarationSpecifiers()!=null) {
+        if (ctx.getChildCount()==2 && ctx.declarationSpecifiers()!=null) {
+            baseType = ctx.declarationSpecifiers().getChild(0).getText();
+        } else if (ctx.declarationSpecifiers()!=null){
             baseType = ctx.declarationSpecifiers().getText();
         }
 
