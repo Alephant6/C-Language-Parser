@@ -10,9 +10,9 @@ public class Main {
     public static void main(String[] args) throws Exception{
         // Option 1
         // Enter the file name of the .c source file, encoded in UTF-8
-//        String fileName = "src/main/java/cn/olifant/CDeclaration/easySamples.c";
-//        String fileName = "src/main/java/cn/olifant/CDeclaration/samples.c";
-        String fileName = "src/main/java/cn/olifant/CDeclaration/complexSamples.c";
+//        String fileName = "src/main/java/cn/olifant/CDeclaration/easySamples.c"; // Easy samples for easy understanding
+        String fileName = "src/main/java/cn/olifant/CDeclaration/samples.c"; // 6 samples provided in the programming_challenge.docx
+//        String fileName = "src/main/java/cn/olifant/CDeclaration/complexSamples.c"; // Complex samples for further understanding
         printCFileAllType(fileName);
 
         // Option 2
