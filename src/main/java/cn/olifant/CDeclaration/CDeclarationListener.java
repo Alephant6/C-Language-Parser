@@ -18,20 +18,15 @@ public class CDeclarationListener extends CBaseListener{
     private int parameterIndex =0;
 
 
+
     @Override
-    public void enterDeclaration(CParser.DeclarationContext ctx) {
+    public void exitDeclaration(CParser.DeclarationContext ctx) {
         // Get the basic type in the declaration
         if (ctx.getChildCount()==2 && ctx.declarationSpecifiers()!=null) {
             baseType = ctx.declarationSpecifiers().getChild(0).getText();
         } else if (ctx.declarationSpecifiers()!=null){
             baseType = ctx.declarationSpecifiers().getText();
         }
-
-    }
-
-
-    @Override
-    public void exitDeclaration(CParser.DeclarationContext ctx) {
         // print baseType
         System.out.print(baseType);
 
@@ -48,15 +43,13 @@ public class CDeclarationListener extends CBaseListener{
     }
 
 
-    @Override
-    public void enterDeclarator(CParser.DeclaratorContext ctx) {
-        // If not empty, get the number of pointers in declartor
-        if (ctx.pointer()!=null) numPointer = ctx.pointer().getChildCount();
-    }
+
 
     // 离开declarator
     @Override
     public void exitDeclarator(CParser.DeclaratorContext ctx) {
+        // If not empty, get the number of pointers in declartor
+        if (ctx.pointer()!=null) numPointer = ctx.pointer().getChildCount();
         // Print as many times as there are pointers
         while (numPointer!=0){
             System.out.print("pointer to ");
@@ -105,21 +98,23 @@ public class CDeclarationListener extends CBaseListener{
         if(parameterIndex==numParameters-1 && numParameters !=1){
             System.out.print(" and ");
         }
+        // if not first nor last second
+        if(parameterIndex>0 && parameterIndex<numParameters-1){
+            System.out.print(", ");
+
+        }
     }
 
 
     @Override
     public void exitParameterDeclaration(CParser.ParameterDeclarationContext ctx) {
         String typeName = ctx.getChild(0).getText();
-        // If it is the first one, it will be printed directly
-        if (parameterIndex==0){
-            System.out.print(typeName);
-            // If it is the last one, and there is more than one parameter
-        }else if (parameterIndex==numParameters-1 && numParameters !=1) {
-            System.out.print(typeName+") ");
+        // If it is the last one, and there is more than one parameter
+        if (parameterIndex==numParameters-1 && numParameters !=1) {
+            System.out.print(typeName+")");
             // After removing the head and the tail, the rest is the intermediate parameters, separated by ", "
         }else {
-            System.out.print(", "+typeName);
+            System.out.print(typeName);
         }
         // Increment the parameter index number by 1
         parameterIndex++;
@@ -129,7 +124,6 @@ public class CDeclarationListener extends CBaseListener{
     @Override
     public void exitParameterList(CParser.ParameterListContext ctx) {
         System.out.print(" returning " );
-
     }
 
 
