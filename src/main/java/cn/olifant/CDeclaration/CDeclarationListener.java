@@ -28,7 +28,7 @@ public class CDeclarationListener extends CBaseListener{
 
     @Override
     public void exitDeclaration(CParser.DeclarationContext ctx) {
-        // print ground rules
+        // print baseType
         // If there is no function, it will be printed at the end
         if (numFunctionDeclaration ==0){
             System.out.print(baseType);
