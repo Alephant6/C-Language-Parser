@@ -2,82 +2,77 @@ package cn.olifant.CDeclaration;
 
 
 public class CDeclarationListener extends CBaseListener{
-    // 定义最基础的类型 baseType
+    // Define the most basic type baseType
     private String baseType;
-    // 判断是否为几层函数声明，默认不是函数。不用enterFunctionDefinition和enterFunctionSpecifier来监听
-    // 是因为在functionDefinition的判断在declaration更上层的externalDeclaration，declaration中无functionDefinition规则；
-    // 并且在externalDeclaration下会优先执行declaration，更无法识别出functionDefinition
-    // 同理functionSpecifier也被其他的规则顶替
+    // Determine whether it is a multi-level function declaration, the default is not a function.
     private int numFunctionDeclaration =0;
-    // 中括号-[]层数，默认没有
+    // Brackets-[] layer number, no by default
     private int numBracket =0;
-    // 普通指针个数，默认没有
+    // The number of common pointers, none by default
     private int numPointer =0;
-    // 抽象指针个数，默认没有
+    // The number of abstract pointers, none by default
     private int numAbstractPointer =0;
-    // 函数参数个数，默认没有
+    // Number of function parameters, none by default
     private int numParameters =0;
-    // 函数参数索引数
+    // Function parameter index number
     private int parameterIndex =0;
 
 
-
-    // 进入declaration时
     @Override
     public void enterDeclaration(CParser.DeclarationContext ctx) {
-        //如果只有declaration两个子节点，说明是最基本的变量声明，这时候它的第一个子节点不会分离类型和变量名，所以需要进一步获取子节点
+        //If there are only two child nodes of declaration, it means that it is the most basic variable declaration. At this time, its first child node will not separate the type and variable name, so further child nodes need to be obtained
         if (ctx.getChildCount()==2){
             baseType = ctx.getChild(0).getChild(0).getText();
         }else {
-            // 否则declaration第一个子节点就是基础类型
+            // Otherwise the first child node of the declaration is the underlying type
             baseType = ctx.getChild(0).getText();
         }
     }
 
-    // 离开declaration时
+
     @Override
     public void exitDeclaration(CParser.DeclarationContext ctx) {
-        // 打印基础规则
-        // 如果不含函数，则最后打印
+        // print ground rules
+        // If there is no function, it will be printed at the end
         if (numFunctionDeclaration ==0){
             System.out.print(baseType);
         }
 
     }
 
-    // 进入directDeclarator
+
     @Override
     public void enterDirectDeclarator(CParser.DirectDeclaratorContext ctx) {
-            // 如果directDeclarator中以]结尾，说明含有[]
-            if (ctx.getText().endsWith("]")) {
-                // 判定存在[]，且其层数加1，这是一个数组
-                numBracket++;
-            }
+        // If the directDeclarator ends with ], it means it contains []
+        if (ctx.getText().endsWith("]")) {
+            // It is determined that [] exists, and its layer number is increased by 1, which is an array
+            numBracket++;
+        }
 //        }
     }
 
-    // 退出directDeclarator
+
     @Override
     public void exitDirectDeclarator(CParser.DirectDeclaratorContext ctx) {
         if (numBracket !=0 && ctx.getChildCount() > 2) {
             String size = ctx.getChild(ctx.getChildCount()-2).getText();
             System.out.print("size-" + size + " array of " );
-            // []，且其层数减1
+            // [], and its layer number minus 1
             numBracket--;
         }
     }
 
-    // 进入declarator
+
     @Override
     public void enterDeclarator(CParser.DeclaratorContext ctx) {
-        // 如果不为空，获取declartor中指针个数
+        // If not empty, get the number of pointers in declartor
         if (ctx.pointer()!=null) numPointer = ctx.pointer().getChildCount();
     }
 
     // 离开declarator
     @Override
     public void exitDeclarator(CParser.DeclaratorContext ctx) {
-        // 有多少个指针就打印多少次
+        // Print as many times as there are pointers
         while (numPointer!=0){
             System.out.print("pointer to ");
             numPointer--;
@@ -85,31 +80,31 @@ public class CDeclarationListener extends CBaseListener{
 
     }
 
-    // 进入abstractDeclarator
+
     @Override
     public void enterAbstractDeclarator(CParser.AbstractDeclaratorContext ctx) {
-        // 如果不为空，获取abstractDeclartor中抽象指针个数
+        // If not empty, get the number of abstract pointers in abstractDeclartor
         if (ctx.pointer()!=null) numAbstractPointer = ctx.pointer().getChildCount();
     }
 
-    // 退出abstractDeclarator
+
     @Override
     public void exitAbstractDeclarator(CParser.AbstractDeclaratorContext ctx) {
-        // 有多少个抽象指针就打印多少次
+        // Print as many times as there are abstract pointers
         while (numAbstractPointer != 0) {
             System.out.print("pointer to ");
             numAbstractPointer--;
         }
     }
 
-    // 进入parameterList
+
     @Override
     public void enterParameterList(CParser.ParameterListContext ctx) {
-        // 函数声明数加1
+        // Increase the number of function declarations by 1
         numFunctionDeclaration++;
-        // 获得函数参数数量
+        // Get the number of function parameters
         numParameters = ctx.parameterDeclaration().size();
-        // 如果函数只有一个参数
+        // If the function has only one parameter
         if (numParameters == 1){
             System.out.print("function that accepts ");
         } else {
@@ -118,38 +113,37 @@ public class CDeclarationListener extends CBaseListener{
 
     }
 
-    // 进入参数-parameterDeclaration
+
     @Override
     public void enterParameterDeclaration(CParser.ParameterDeclarationContext ctx) {
-        // 如果是最后一个，且不只有一个参数
+        // If it is the last one, and there is more than one parameter
         if(parameterIndex==numParameters-1 && numParameters !=1){
             System.out.print("and ");
         }
     }
 
-    // 退出参数-parameterDeclaration
+
     @Override
     public void exitParameterDeclaration(CParser.ParameterDeclarationContext ctx) {
         String typeName = ctx.getChild(0).getText();
-        // 如果是第一个就直接打印
+        // If it is the first one, it will be printed directly
         if (parameterIndex==0){
             System.out.print(typeName+" ");
-        // 如果是最后一个，且不只有一个参数
+            // If it is the last one, and there is more than one parameter
         }else if (parameterIndex==numParameters-1 && numParameters !=1) {
             System.out.print(typeName+") ");
-        // 去头去尾后剩下的是中间参数，用", "隔开
+            // After removing the head and the tail, the rest is the intermediate parameters, separated by ", "
         }else {
             System.out.print(", "+typeName);
         }
-        // 参数索引数加1
+        // Increment the parameter index number by 1
         parameterIndex++;
     }
 
-    // 离开函数-parameterList
+
     @Override
     public void exitParameterList(CParser.ParameterListContext ctx) {
         System.out.print("returning "+ baseType );
-
 
     }
 
