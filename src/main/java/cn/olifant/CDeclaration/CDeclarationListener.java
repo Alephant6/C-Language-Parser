@@ -4,10 +4,6 @@ package cn.olifant.CDeclaration;
 public class CDeclarationListener extends CBaseListener{
     // Define the most basic type baseType
     private String baseType;
-    // The number of common pointers, none by default
-    private int numPointer =0;
-    // The number of abstract pointers, none by default
-    private int numAbstractPointer =0;
     // Number of function parameters, none by default
     private int numParameters =0;
     // Function parameter index number
@@ -38,9 +34,10 @@ public class CDeclarationListener extends CBaseListener{
     }
 
 
-    // 离开declarator
     @Override
     public void exitDeclarator(CParser.DeclaratorContext ctx) {
+        // The number of common pointers, none by default
+        int numPointer =0;
         // If not empty, get the number of pointers in declartor
         if (ctx.pointer()!=null) numPointer = ctx.pointer().getChildCount();
         // Print as many times as there are pointers
@@ -54,6 +51,8 @@ public class CDeclarationListener extends CBaseListener{
 
     @Override
     public void exitAbstractDeclarator(CParser.AbstractDeclaratorContext ctx) {
+        // The number of abstract pointers, none by default
+        int numAbstractPointer =0;
         // If not empty, get the number of abstract pointers in abstractDeclartor
         if (ctx.pointer()!=null) numAbstractPointer = ctx.pointer().getChildCount();
         // Print as many times as there are abstract pointers
