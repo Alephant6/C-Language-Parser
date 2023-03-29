@@ -83,7 +83,7 @@ public class CDeclarationListener extends CBaseListener{
         if(parameterIndex==numParameters-1 && numParameters !=1){
             System.out.print(" and ");
         }
-        // if not first nor last second
+        // if between the first and the second-to-last
         if(parameterIndex>0 && parameterIndex<numParameters-1){
             System.out.print(", ");
 
@@ -93,13 +93,13 @@ public class CDeclarationListener extends CBaseListener{
 
     @Override
     public void exitParameterDeclaration(CParser.ParameterDeclarationContext ctx) {
-        String typeName = ctx.getChild(0).getText();
-        // If it is the last one, and there is more than one parameter
+        // Get the base name of parameter
+        String parameterBaseName = ctx.getChild(0).getText();
+        // If there are multiple parameters and it is the last
         if (parameterIndex==numParameters-1 && numParameters !=1) {
-            System.out.print(typeName+")");
-            // After removing the head and the tail, the rest is the intermediate parameters, separated by ", "
+            System.out.print(parameterBaseName +")");
         }else {
-            System.out.print(typeName);
+            System.out.print(parameterBaseName);
         }
         // Increment the parameter index number by 1
         parameterIndex++;
