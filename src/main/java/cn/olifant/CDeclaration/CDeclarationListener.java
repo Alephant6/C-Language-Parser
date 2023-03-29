@@ -4,10 +4,6 @@ package cn.olifant.CDeclaration;
 public class CDeclarationListener extends CBaseListener{
     // Define the most basic type baseType
     private String baseType;
-    // The number of common pointers, none by default
-    private int numPointer =0;
-    // The number of abstract pointers, none by default
-    private int numAbstractPointer =0;
     // Number of function parameters, none by default
     private int numParameters =0;
     // Function parameter index number
@@ -38,9 +34,10 @@ public class CDeclarationListener extends CBaseListener{
     }
 
 
-    // 离开declarator
     @Override
     public void exitDeclarator(CParser.DeclaratorContext ctx) {
+        // The number of common pointers, none by default
+        int numPointer =0;
         // If not empty, get the number of pointers in declartor
         if (ctx.pointer()!=null) numPointer = ctx.pointer().getChildCount();
         // Print as many times as there are pointers
@@ -54,6 +51,8 @@ public class CDeclarationListener extends CBaseListener{
 
     @Override
     public void exitAbstractDeclarator(CParser.AbstractDeclaratorContext ctx) {
+        // The number of abstract pointers, none by default
+        int numAbstractPointer =0;
         // If not empty, get the number of abstract pointers in abstractDeclartor
         if (ctx.pointer()!=null) numAbstractPointer = ctx.pointer().getChildCount();
         // Print as many times as there are abstract pointers
@@ -84,7 +83,7 @@ public class CDeclarationListener extends CBaseListener{
         if(parameterIndex==numParameters-1 && numParameters !=1){
             System.out.print(" and ");
         }
-        // if not first nor last second
+        // if between the first and the second-to-last
         if(parameterIndex>0 && parameterIndex<numParameters-1){
             System.out.print(", ");
 
@@ -94,13 +93,13 @@ public class CDeclarationListener extends CBaseListener{
 
     @Override
     public void exitParameterDeclaration(CParser.ParameterDeclarationContext ctx) {
-        String typeName = ctx.getChild(0).getText();
-        // If it is the last one, and there is more than one parameter
+        // Get the base name of parameter
+        String parameterBaseName = ctx.getChild(0).getText();
+        // If there are multiple parameters and it is the last
         if (parameterIndex==numParameters-1 && numParameters !=1) {
-            System.out.print(typeName+")");
-            // After removing the head and the tail, the rest is the intermediate parameters, separated by ", "
+            System.out.print(parameterBaseName +")");
         }else {
-            System.out.print(typeName);
+            System.out.print(parameterBaseName);
         }
         // Increment the parameter index number by 1
         parameterIndex++;

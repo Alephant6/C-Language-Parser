@@ -1,6 +1,6 @@
 int x;
 int *p;
-int (*p)
+int (*p);
 float xArray[2];
 int *xArray[2];
 int (*pArray)[2];
